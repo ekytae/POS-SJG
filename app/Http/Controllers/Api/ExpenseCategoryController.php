@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Models\ExpenseCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ApiResponse;
 
-class CategoryController extends Controller
+class ExpenseCategoryController extends Controller
 {
     use ApiResponse;
 
     public function index()
     {
-        $categories = Category::all();
-        return $this->successResponse($categories, 'Data kategori berhasil diambil');
+        $categories = ExpenseCategory::all();
+        return $this->successResponse($categories, 'Data kategori pengeluaran berhasil diambil');
     }
 
     public function store(Request $request)
@@ -28,27 +28,27 @@ class CategoryController extends Controller
             return $this->errorResponse('Validation Error', $validator->errors(), 422);
         }
 
-        $category = Category::create($validator->validated());
-        return $this->successResponse($category, 'Kategori berhasil ditambahkan', 201);
+        $category = ExpenseCategory::create($validator->validated());
+        return $this->successResponse($category, 'Kategori pengeluaran berhasil ditambahkan', 201);
     }
 
     public function show($id)
     {
-        $category = Category::find($id);
+        $category = ExpenseCategory::find($id);
 
         if (!$category) {
-            return $this->errorResponse('Kategori tidak ditemukan', [], 404);
+            return $this->errorResponse('Kategori pengeluaran tidak ditemukan', [], 404);
         }
 
-        return $this->successResponse($category, 'Detail kategori berhasil diambil');
+        return $this->successResponse($category, 'Detail kategori pengeluaran berhasil diambil');
     }
 
     public function update(Request $request, $id)
     {
-        $category = Category::find($id);
+        $category = ExpenseCategory::find($id);
 
         if (!$category) {
-            return $this->errorResponse('Kategori tidak ditemukan', [], 404);
+            return $this->errorResponse('Kategori pengeluaran tidak ditemukan', [], 404);
         }
 
         $validator = Validator::make($request->all(), [
@@ -60,26 +60,26 @@ class CategoryController extends Controller
         }
 
         $category->update($validator->validated());
-        return $this->successResponse($category, 'Kategori berhasil diupdate');
+        return $this->successResponse($category, 'Kategori pengeluaran berhasil diupdate');
     }
 
     public function destroy($id)
     {
-        $category = Category::find($id);
+        $category = ExpenseCategory::find($id);
 
         if (!$category) {
-            return $this->errorResponse('Kategori tidak ditemukan', [], 404);
+            return $this->errorResponse('Kategori pengeluaran tidak ditemukan', [], 404);
         }
 
-        if ($category->products()->exists()) {
+        if ($category->expenses()->exists()) {
             return $this->errorResponse(
-                'Kategori tidak bisa dihapus karena masih digunakan oleh produk',
+                'Kategori tidak bisa dihapus karena masih memiliki data pengeluaran',
                 [],
                 400
             );
         }
 
         $category->delete();
-        return $this->successResponse(null, 'Kategori berhasil dihapus');
+        return $this->successResponse(null, 'Kategori pengeluaran berhasil dihapus');
     }
 }
