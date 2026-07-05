@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -5,11 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
-// use App\Traits\ApiResponse; // Pastikan trait ini di-import jika kamu membuatnya di folder Traits
+use App\Traits\ApiResponse; // Pastikan trait ini di-import jika kamu membuatnya di folder Traits
 
 class AuthController extends Controller
 {
-    // use ApiResponse; 
+    use ApiResponse; 
 
     public function login(Request $request)
     {
@@ -40,5 +42,19 @@ class AuthController extends Controller
         ];
 
         return $this->successResponse($data, 'Login berhasil');
+    }
+
+    public function me(Request $request)
+    {
+        // Mengembalikan data user yang sedang login berdasarkan token
+        return $this->successResponse($request->user(), 'Profil berhasil diambil');
+    }
+
+    public function logout(Request $request)
+    {
+        // Menghapus token yang sedang digunakan saat ini (Revoke)
+        $request->user()->currentAccessToken()->delete();
+
+        return $this->successResponse(null, 'Berhasil logout');
     }
 }
