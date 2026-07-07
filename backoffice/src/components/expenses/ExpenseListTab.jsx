@@ -4,7 +4,7 @@ import { useCrud } from '../../hooks/useCrud';
 import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import Input from '../ui/Input';
-import { formatRupiah } from '../../utils/format';
+import { formatRupiah, toLocalDateString } from '../../utils/format';
 
 export default function ExpenseListTab({ expenseCategories }) {
   const { items, loading, error, remove, refetch } = useCrud('/expenses');

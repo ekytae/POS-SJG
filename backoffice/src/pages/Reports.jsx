@@ -5,6 +5,7 @@ import SalesReportTab from '../components/reports/SalesReportTab';
 import BestSellingTab from '../components/reports/BestSellingTab';
 import ExpenseReportTab from '../components/reports/ExpenseReportTab';
 import StockCardTab from '../components/reports/StockCardTab';
+import { toLocalDateString } from '../utils/format';
 
 const tabs = [
   { key: 'sales', label: 'Penjualan' },
@@ -12,13 +13,6 @@ const tabs = [
   { key: 'expenses', label: 'Pengeluaran' },
   { key: 'stock-card', label: 'Kartu Stok' },
 ];
-
-function toLocalDateString(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
 
 function defaultFrom() {
   const d = new Date();

@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
 import Expenses from './pages/Expenses';
 import Reports from './pages/Reports';
+import Settings from './pages/Settings';
 import ProtectedRoute from './routes/ProtectedRoute';
 import AppLayout from './components/layout/AppLayout';
 
@@ -19,7 +20,7 @@ export default function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/expenses" element={<Expenses />} />
             <Route path="/reports" element={<Reports />} />
-            <Route path="/settings" element={<div>Pengaturan (Fase 4f)</div>} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
         </Route>
 
