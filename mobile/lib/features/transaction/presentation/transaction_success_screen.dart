@@ -5,6 +5,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/formatter.dart';
 import '../../printer/data/receipt_generator.dart';
 import '../../printer/presentation/printer_provider.dart';
+import '../../printer/presentation/widgets/whatsapp_receipt_sheet.dart';
 import '../data/transaction_service.dart';
 
 class TransactionSuccessScreen extends ConsumerWidget {
@@ -13,8 +14,8 @@ class TransactionSuccessScreen extends ConsumerWidget {
   const TransactionSuccessScreen({super.key, required this.result});
 
   Future<void> _handlePrint(BuildContext context, WidgetRef ref) async {
-    final printersAsync = await ref.read(printersProvider.future);
-    final defaultPrinter = printersAsync.where((p) => p.isDefault).firstOrNull;
+    final printers = await ref.read(printersProvider.future);
+    final defaultPrinter = printers.where((p) => p.isDefault).firstOrNull;
 
     if (defaultPrinter == null) {
       if (context.mounted) {
@@ -57,6 +58,10 @@ class TransactionSuccessScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Prefetch storeSettings begitu halaman ini dibuka, supaya saat tombol
+    // WhatsApp ditekan nanti, datanya sudah siap tanpa perlu await lagi.
+    final storeSettingsAsync = ref.watch(storeSettingsProvider);
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -109,6 +114,19 @@ class TransactionSuccessScreen extends ConsumerWidget {
                   onPressed: () => _handlePrint(context, ref),
                   icon: const Icon(Icons.receipt_long_outlined, size: 18),
                   label: const Text('Cetak Struk'),
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () => showWhatsAppReceiptSheet(
+                    context,
+                    result,
+                    storeSettingsAsync.value, // null kalau masih loading, sheet akan pakai fallback nama
+                  ),
+                  icon: const Icon(Icons.chat_bubble_outline, size: 18),
+                  label: const Text('Kirim Struk via WhatsApp'),
                 ),
               ),
               const SizedBox(height: 10),
