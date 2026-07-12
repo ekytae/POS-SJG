@@ -11,7 +11,6 @@ class BluetoothDeviceInfo {
 class BluetoothPrinterService {
   Future<bool> requestPermissions() async {
     final statuses = await [
-      Permission.bluetooth,
       Permission.bluetoothScan,
       Permission.bluetoothConnect,
       Permission.locationWhenInUse,
